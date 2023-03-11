@@ -50,9 +50,20 @@ export async function getAllCategories() {
     return await res.json();
 }
 
-export async function getMoviePoster(route) {
-    const res = await fetch(`api${route}`);
-    console.log(res);
+export async function getScreenings(movieId) {
+    /**
+     * @type {MovieDate[]}
+     * @description Fetches all movie dates from the API
+     * @returns {Promise<MovieDate[]>}
+     *
+     * @property {
+     * id: number
+     * time: string
+     * movieId: number
+     * auditoriumId: number
+     * } MovieDate
+     */
+    const res = await fetch(`api/screenings/${movieId}`);
     return await res.json();
 }
 

@@ -1,6 +1,8 @@
 import { Card } from "react-bootstrap";
+import { getScreenings } from "../data";
+import { useState, useEffect } from "react";
 
-export function MovieCard({ movie, category }) {
+export function MovieCard({ movie }) {
     /**
      * @property {
      *    id: number
@@ -13,8 +15,35 @@ export function MovieCard({ movie, category }) {
      *  } Movie
      */
 
+    const [screening, setScreening] = useState({});
+
+    useEffect(() => {
+        getScreenings(movie.id).then((data) => setScreening(data));
+    }, []);
+
     return (
-        <Card bg="dark" text="white" id="base-card">
+        <Card bg="dark" text="white" id="base-card" position="relative">
+            <Card
+                bg="dark"
+                text="white"
+                style={{
+                    position: "absolute",
+                    margin: "1.4em",
+                    width: "25%",
+                    opacity: "0.8",
+                }}
+            >
+                {
+                    // minutes to hours and minutes
+                    ` ${
+                        movie.description.length
+                            ? `${Math.floor(movie.description.length / 60)}h ${
+                                  movie.description.length % 60
+                              }m`
+                            : ""
+                    } `
+                }
+            </Card>
             <Card.Body>
                 <Card.Img
                     variant="top"
@@ -29,9 +58,7 @@ export function MovieCard({ movie, category }) {
                         textOverflow: "ellipsis",
                     }}
                 >
-                    <Card.Text>
-                        {movie.description.categories.join(", ")}
-                    </Card.Text>
+                    <Card.Text>{Date(screening.time)}</Card.Text>
                 </Card.Footer>
             </Card.Body>
         </Card>
