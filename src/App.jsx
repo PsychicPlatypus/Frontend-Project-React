@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
-import { Card, Nav, Navbar } from "react-bootstrap";
-import { getAllMovies, getAllCategories } from "../data.js";
+import { Nav, Navbar } from "react-bootstrap";
 import { Route, Routes } from "react-router-dom";
-import { Movies } from "./Movies";
+import { MoviesCategories } from "./MoviesCategories";
+import { MoviesAll } from "./MoviesAll";
 
+import "./MovieCard.css";
 import "./App.css";
 
 function App() {
@@ -17,15 +17,22 @@ function App() {
             >
                 <Navbar.Brand href="#">Navbar</Navbar.Brand>
                 <Nav.Item className="d-flex align-items-center btn btn-dark">
-                    <Nav.Link href="/movies">Movies</Nav.Link>
+                    <Nav.Link href="/movies-categories">
+                        Movies By Categories
+                    </Nav.Link>
                 </Nav.Item>
                 <Nav.Item className="d-flex align-items-center btn btn-dark">
-                    <Nav.Link href="/other-movies">Other Movies</Nav.Link>
+                    <Nav.Link href="/movies-all">All Movies</Nav.Link>
                 </Nav.Item>
             </Navbar>
             <main>
                 <Routes>
-                    <Route path="/movies" element={<Movies />} />
+                    <Route path="/" element={<MoviesCategories />} />
+                    <Route
+                        path="/movies-categories"
+                        element={<MoviesCategories />}
+                    />
+                    <Route path="/movies-all" element={<MoviesAll />} />
                 </Routes>
             </main>
         </div>

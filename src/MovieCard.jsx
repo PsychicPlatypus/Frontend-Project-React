@@ -1,6 +1,6 @@
 import { Card } from "react-bootstrap";
 
-export function MovieCard({ movie }) {
+export function MovieCard({ movie, category }) {
     /**
      * @property {
      *    id: number
@@ -14,14 +14,25 @@ export function MovieCard({ movie }) {
      */
 
     return (
-        <Card bg="dark" text="white" style={{ width: "18rem", margin: "1rem" }}>
-            <Card.Img
-                variant="top"
-                src={`https://cinema-rest.nodehill.se${movie.description.posterImage}`}
-            />
+        <Card bg="dark" text="white" id="base-card">
             <Card.Body>
-                <Card.Title>{movie.title}</Card.Title>
-                <Card.Text>{movie.description.length}</Card.Text>
+                <Card.Img
+                    variant="top"
+                    src={`https://cinema-rest.nodehill.se${movie.description.posterImage}`}
+                    id="poster-image"
+                />
+                <Card.Title id="card-title">{movie.title}</Card.Title>
+                <Card.Footer
+                    style={{
+                        height: "2rem",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                    }}
+                >
+                    <Card.Text>
+                        {movie.description.categories.join(", ")}
+                    </Card.Text>
+                </Card.Footer>
             </Card.Body>
         </Card>
     );

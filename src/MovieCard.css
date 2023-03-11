@@ -1,0 +1,23 @@
+#base-card {
+    width: 18rem;
+    margin: 0.8em;
+    /* Box shadow for dark card: */
+    box-shadow: 0 0 10px 0 rgba(255, 255, 255, 0.2);
+    height: 31em;
+    margin-bottom: 0.6em;
+}
+
+#poster-image {
+    height: 23.4em;
+    object-fit: cover;
+}
+
+#card-title {
+    height: 3rem;
+    margin: 0.4em 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
