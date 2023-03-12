@@ -15,7 +15,82 @@ export async function getAllMovies() {
      *  } Movie
      */
     const res = await fetch("api/movies");
-    return await res.json();
+    const movies = await res.json();
+    const screenings = await getAllScreenings();
+
+    movies.reduce((acc, movie) => {
+        movie.screenings = screenings.filter(
+            (screening) => screening.movieId === movie.id
+        )[0];
+        return acc;
+    }, []);
+    return movies;
+}
+
+export async function getMoviesWithSort(sort) {
+    /**
+     * @type {Movie[]}
+     * @description Fetches all movies from the API
+     * @returns {Promise<Movie[]>}
+
+     * @property {
+     *    id: number
+     *    title: string
+     *    description: {
+     *      length: number
+     *      categories: [string]
+     *      posterImage: string
+     *    }
+     *  } Movie
+     */
+    if (["title", "-title"].includes(sort)) {
+        const res = await fetch(`api/movies?sort=${sort}`);
+        const movies = await res.json();
+        const screenings = await getAllScreenings();
+
+        movies.reduce((acc, movie) => {
+            movie.screenings = screenings.filter(
+                (screening) => screening.movieId === movie.id
+            )[0];
+            return acc;
+        }, []);
+        return movies;
+    }
+    const res = await fetch("api/movies");
+    const movies = await res.json();
+    const screenings = await getAllScreenings();
+
+    movies.reduce((acc, movie) => {
+        movie.screenings = screenings.filter(
+            (screening) => screening.movieId === movie.id
+        )[0];
+        return acc;
+    }, []);
+
+    switch (sort) {
+        case "length":
+            return movies.sort(
+                (a, b) => a.description.length - b.description.length
+            );
+        case "-length":
+            return movies.sort(
+                (a, b) => b.description.length - a.description.length
+            );
+        case "date":
+            return movies.sort(
+                (a, b) =>
+                    Date.parse(a.screenings.time) -
+                    Date.parse(b.screenings.time)
+            );
+        case "-date":
+            return movies.sort(
+                (a, b) =>
+                    Date.parse(b.screenings.time) -
+                    Date.parse(a.screenings.time)
+            );
+        default:
+            return movies;
+    }
 }
 
 export async function getTicketTypes() {
@@ -50,12 +125,12 @@ export async function getAllCategories() {
     return await res.json();
 }
 
-export async function getScreenings(movieId) {
+async function getAllScreenings() {
     /**
      * @type {MovieDate[]}
      * @description Fetches all movie dates from the API
      * @returns {Promise<MovieDate[]>}
-     *
+
      * @property {
      * id: number
      * time: string
@@ -63,8 +138,6 @@ export async function getScreenings(movieId) {
      * auditoriumId: number
      * } MovieDate
      */
-    const res = await fetch(`api/screenings/${movieId}`);
+    const res = await fetch("api/screenings");
     return await res.json();
 }
-
-getAllCategories();

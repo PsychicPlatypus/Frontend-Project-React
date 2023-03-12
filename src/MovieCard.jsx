@@ -1,6 +1,4 @@
 import { Card } from "react-bootstrap";
-import { getScreenings } from "../data";
-import { useState, useEffect } from "react";
 
 export function MovieCard({ movie }) {
     /**
@@ -14,12 +12,6 @@ export function MovieCard({ movie }) {
      *    }
      *  } Movie
      */
-
-    const [screening, setScreening] = useState({});
-
-    useEffect(() => {
-        getScreenings(movie.id).then((data) => setScreening(data));
-    }, []);
 
     return (
         <Card bg="dark" text="white" id="base-card" position="relative">
@@ -58,7 +50,11 @@ export function MovieCard({ movie }) {
                         textOverflow: "ellipsis",
                     }}
                 >
-                    <Card.Text>{Date(screening.time)}</Card.Text>
+                    <Card.Text>
+                        {movie.screenings.time
+                            .replace(/T/, " ")
+                            .replace(/\..+/, "")}
+                    </Card.Text>
                 </Card.Footer>
             </Card.Body>
         </Card>

@@ -1,14 +1,15 @@
 import { Carousel, Container, Row } from "react-bootstrap";
 import { useState, useEffect } from "react";
-import { getAllCategories, getAllMovies } from "../data";
+import { getAllCategories, getMoviesWithSort } from "../data";
 import { MovieCard } from "./MovieCard";
 
 export function MoviesCategories() {
     const [movies, setMovies] = useState([]);
     const [categories, setCategories] = useState([]);
 
+    // Should be sorted by movie screenings date
     useEffect(() => {
-        getAllMovies().then((data) => setMovies(data));
+        getMoviesWithSort("date").then((data) => setMovies(data));
     }, []);
 
     useEffect(() => {
@@ -16,7 +17,7 @@ export function MoviesCategories() {
     }, []);
 
     return (
-        <Container fluid={true} style={{ position: "relative" }} fade>
+        <Container fluid={true} style={{ position: "relative" }}>
             {categories.map((category) => (
                 <Row key={category.id} className="justify-content-center mb-5">
                     <h2>{category.title}</h2>
