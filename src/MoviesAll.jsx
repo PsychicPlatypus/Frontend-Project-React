@@ -9,6 +9,8 @@ import { Container, Row, DropdownButton, Dropdown, Nav } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilter, faList } from "@fortawesome/free-solid-svg-icons";
+import { SortingWidget } from "./SortingWidget";
+import { FilterWidget } from "./FilterWidget";
 
 const SORTING = [
     { id: 1, name: "Title Ascending" },
@@ -21,16 +23,11 @@ const SORTING = [
 
 export function MoviesAll() {
     const [movies, setMovies] = useState([]);
-    const [categories, setCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState("All");
     const [sorting, setSorting] = useState("Date Ascending");
 
     useEffect(() => {
         getAllMovies().then((data) => setMovies(data));
-    }, []);
-
-    useEffect(() => {
-        getAllCategories().then((data) => setCategories(data));
     }, []);
 
     useEffect(() => {
@@ -91,69 +88,10 @@ export function MoviesAll() {
             </Row>
 
             {/* Filters */}
-            <DropdownButton
-                drop="up"
-                align="end"
-                variant="success"
-                title={
-                    <span>
-                        <FontAwesomeIcon icon={faFilter} />
-                    </span>
-                }
-                style={{
-                    position: "sticky",
-                    bottom: "0",
-                    padding: "0em 0.4em 1em",
-                    borderRadius: "50%",
-                    float: "right",
-                }}
-            >
-                <Dropdown.Item eventKey="4.1">
-                    <Nav.Link onClick={() => setSelectedCategory("All")}>
-                        All
-                    </Nav.Link>
-                </Dropdown.Item>
-                {categories.map((category) => (
-                    <Dropdown.Item key={category.id} eventKey="4.1">
-                        <Nav.Link
-                            onClick={() => setSelectedCategory(category.title)}
-                        >
-                            {category.title}
-                        </Nav.Link>
-                    </Dropdown.Item>
-                ))}
-                <Dropdown.Divider />
-                <Dropdown.Item eventKey="4.2">Filters</Dropdown.Item>
-            </DropdownButton>
+            <FilterWidget func={setSelectedCategory} />
 
             {/* Sort */}
-            <DropdownButton
-                drop="up"
-                align="end"
-                variant="success"
-                title={
-                    <span>
-                        <FontAwesomeIcon icon={faList} />
-                    </span>
-                }
-                style={{
-                    position: "sticky",
-                    bottom: "0",
-                    padding: "0em 0.4em 1em",
-                    borderRadius: "50%",
-                    float: "right",
-                }}
-            >
-                {SORTING.map((sorting) => (
-                    <Dropdown.Item key={sorting.id} eventKey="4.1">
-                        <Nav.Link onClick={() => setSorting(sorting.name)}>
-                            {sorting.name}
-                        </Nav.Link>
-                    </Dropdown.Item>
-                ))}
-                <Dropdown.Divider />
-                <Dropdown.Item eventKey="4.2">Sorting</Dropdown.Item>
-            </DropdownButton>
+            <SortingWidget func={setSorting} />
         </Container>
     );
 }
