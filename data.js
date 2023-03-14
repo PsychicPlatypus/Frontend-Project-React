@@ -141,3 +141,32 @@ async function getAllScreenings() {
     const res = await fetch("api/screenings");
     return await res.json();
 }
+
+export async function filterByCategory(category) {
+    /**
+     * @type {Movie[]}
+     * @description Fetches all movies from the API
+     * @returns {Promise<Movie[]>}
+
+     * @property {
+     *    id: number
+     *    title: string
+     *    description: {
+     *      length: number
+     *      categories: [string]
+     *      posterImage: string
+     *    }
+     *  } Movie
+     */
+    const res = await fetch(`api/movies?category=${category}`);
+    const movies = await res.json();
+    const screenings = await getAllScreenings();
+
+    movies.reduce((acc, movie) => {
+        movie.screenings = screenings.filter(
+            (screening) => screening.movieId === movie.id
+        )[0];
+        return acc;
+    }, []);
+    return movies;
+}

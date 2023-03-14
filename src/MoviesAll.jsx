@@ -1,5 +1,10 @@
 import { MovieCard } from "./MovieCard";
-import { getAllMovies, getAllCategories, getMoviesWithSort } from "../data";
+import {
+    getAllMovies,
+    getAllCategories,
+    getMoviesWithSort,
+    filterByCategory,
+} from "../data";
 import { Container, Row, DropdownButton, Dropdown, Nav } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -17,6 +22,7 @@ const SORTING = [
 export function MoviesAll() {
     const [movies, setMovies] = useState([]);
     const [categories, setCategories] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState("All");
     const [sorting, setSorting] = useState("Date Ascending");
 
     useEffect(() => {
@@ -28,11 +34,17 @@ export function MoviesAll() {
     }, []);
 
     useEffect(() => {
-        if (categories === "All") {
+        if (selectedCategory === "All") {
             getAllMovies().then((data) => setMovies(data));
             return;
         }
-    }, [categories]);
+        const filteredMovies = movies.filter((movie) => {
+            const categories = movie.description.categories;
+            return categories.some((category) => category === selectedCategory);
+        });
+        console.log(filteredMovies);
+        setMovies(filteredMovies);
+    }, [selectedCategory]);
 
     useEffect(() => {
         switch (sorting) {
@@ -66,22 +78,16 @@ export function MoviesAll() {
         setSorting("");
     }, [sorting]);
 
-    useEffect(() => {
-        if (categories === "All") {
-            getAllMovies().then((data) => setMovies(data));
-            return;
-        }
-        movies.filter((movie) =>
-            movie.description.categories.includes(category.title)
-        );
-    }, [categories]);
-
     return (
         <Container fluid={true} style={{ position: "relative" }}>
             <Row style={{ justifyContent: "center" }}>
-                {movies.map((movie) => (
-                    <MovieCard key={movie.id} movie={movie} />
-                ))}
+                {movies.length !== 0 ? (
+                    movies.map((movie) => (
+                        <MovieCard key={movie.id} movie={movie} />
+                    ))
+                ) : (
+                    <h1>No movies found...</h1>
+                )}
             </Row>
 
             {/* Filters */}
@@ -102,9 +108,16 @@ export function MoviesAll() {
                     float: "right",
                 }}
             >
+                <Dropdown.Item eventKey="4.1">
+                    <Nav.Link onClick={() => setSelectedCategory("All")}>
+                        All
+                    </Nav.Link>
+                </Dropdown.Item>
                 {categories.map((category) => (
                     <Dropdown.Item key={category.id} eventKey="4.1">
-                        <Nav.Link onClick={() => setCategories(category.title)}>
+                        <Nav.Link
+                            onClick={() => setSelectedCategory(category.title)}
+                        >
                             {category.title}
                         </Nav.Link>
                     </Dropdown.Item>
@@ -113,7 +126,7 @@ export function MoviesAll() {
                 <Dropdown.Item eventKey="4.2">Filters</Dropdown.Item>
             </DropdownButton>
 
-            {/* List */}
+            {/* Sort */}
             <DropdownButton
                 drop="up"
                 align="end"
