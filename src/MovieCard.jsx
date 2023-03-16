@@ -1,6 +1,6 @@
 import { Card } from "react-bootstrap";
 
-export function MovieCard({ movie }) {
+export function MovieCard({ movie, withScreenings }) {
     /**
      * @property {
      *    id: number
@@ -14,7 +14,15 @@ export function MovieCard({ movie }) {
      */
 
     return (
-        <Card bg="dark" text="white" id="base-card" position="relative">
+        <Card
+            bg="dark"
+            text="white"
+            id="base-card"
+            position="relative"
+            onClick={() => {
+                window.location.href = `/book-movie/${movie.id}`;
+            }}
+        >
             <Card
                 bg="dark"
                 text="white"
@@ -43,19 +51,22 @@ export function MovieCard({ movie }) {
                     id="poster-image"
                 />
                 <Card.Title id="card-title">{movie.title}</Card.Title>
-                <Card.Footer
-                    style={{
-                        height: "2rem",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                    }}
-                >
-                    <Card.Text>
-                        {movie.screenings.time
-                            .replace(/T/, " ")
-                            .replace(/\..+/, "")}
-                    </Card.Text>
-                </Card.Footer>
+
+                {withScreenings && (
+                    <Card.Footer
+                        style={{
+                            height: "2rem",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                        }}
+                    >
+                        <Card.Text>
+                            {movie.screenings.time
+                                .replace(/T/, " ")
+                                .replace(/\..+/, "")}
+                        </Card.Text>
+                    </Card.Footer>
+                )}
             </Card.Body>
         </Card>
     );

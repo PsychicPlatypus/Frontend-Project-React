@@ -27,6 +27,12 @@ export async function getAllMovies() {
     return movies;
 }
 
+export async function getMovieById(movieId) {
+    const res = await fetch(`/api/movies/${movieId}`);
+    const data = await res.json();
+    return data;
+}
+
 export async function getMoviesWithSort(sort) {
     /**
      * @type {Movie[]}
@@ -142,31 +148,20 @@ async function getAllScreenings() {
     return await res.json();
 }
 
-export async function filterByCategory(category) {
+export async function getOccupiedSeats(movieName) {
     /**
-     * @type {Movie[]}
-     * @description Fetches all movies from the API
-     * @returns {Promise<Movie[]>}
-
      * @property {
-     *    id: number
-     *    title: string
-     *    description: {
-     *      length: number
-     *      categories: [string]
-     *      posterImage: string
-     *    }
-     *  } Movie
+     * screeningId: number
+     * screeningTime: string
+     * movie: string
+     * auditorium: string
+     * occupiedSeats: string
+     * occupied: number
+     * total: number
+     * occupiedPercent: string
+     * } OccupiedSeats
      */
-    const res = await fetch(`api/movies?category=${category}`);
-    const movies = await res.json();
-    const screenings = await getAllScreenings();
 
-    movies.reduce((acc, movie) => {
-        movie.screenings = screenings.filter(
-            (screening) => screening.movieId === movie.id
-        )[0];
-        return acc;
-    }, []);
-    return movies;
+    const res = await fetch(`/api/occupied_seats?movie=${movieName}`);
+    return await res.json();
 }

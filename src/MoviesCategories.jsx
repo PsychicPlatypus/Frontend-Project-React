@@ -52,6 +52,7 @@ export function MoviesCategories() {
                                                 <MovieCard
                                                     key={movie.id}
                                                     movie={movie}
+                                                    withScreenings={true}
                                                 />
                                             ))}
                                         </Row>

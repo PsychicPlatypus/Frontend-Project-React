@@ -5,6 +5,9 @@ import { MoviesAll } from "./MoviesAll";
 
 import "./MovieCard.css";
 import "./App.css";
+import { BookMovie } from "./BookMovie";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFilm } from "@fortawesome/free-solid-svg-icons";
 
 function App() {
     return (
@@ -15,7 +18,10 @@ function App() {
                 variant="dark"
                 className="justify-content-center flex-wrap"
             >
-                <Navbar.Brand href="#">Navbar</Navbar.Brand>
+                <Navbar.Brand href="#">
+                    <FontAwesomeIcon icon={faFilm} />
+                    <span className="ms-2">Cinema</span>
+                </Navbar.Brand>
                 <Nav.Item className="d-flex align-items-center btn btn-dark">
                     <Nav.Link href="/movies-categories">
                         Movies By Categories
@@ -33,6 +39,7 @@ function App() {
                         element={<MoviesCategories />}
                     />
                     <Route path="/movies-all" element={<MoviesAll />} />
+                    <Route path="/book-movie/:id" element={<BookMovie />} />
                 </Routes>
             </main>
         </div>
