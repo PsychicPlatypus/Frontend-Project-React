@@ -134,17 +134,15 @@ export function BookMovie() {
     return (
         <Container>
             <Row className="justify-content-center mb-5">
-                {movie.map((movie) => (
-                    <MovieCard key={movie.id} movie={movie} />
-                ))}
+                {movie.length > 0 ? (
+                    movie.map((movie) => (
+                        <MovieCard key={movie.id} movie={movie} />
+                    ))
+                ) : (
+                    <h1>Loading...</h1>
+                )}
             </Row>
-            <Form
-                style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                }}
-            >
+            <Form id="form">
                 <Form.Group controlId="formAuditorium">
                     <Form.Label>
                         <h2>Auditorium</h2>
@@ -163,6 +161,7 @@ export function BookMovie() {
                                 onClick={() => {
                                     setAuditorium(auditorium_.name);
                                 }}
+                                disabled={movie.length === 0}
                             >
                                 {auditorium_.name}
                             </ToggleButton>
@@ -170,12 +169,7 @@ export function BookMovie() {
                     </ButtonGroup>
                 </Form.Group>
 
-                <Form.Group
-                    style={{
-                        marginTop: "2rem",
-                    }}
-                    hidden={auditorium.length === 0}
-                >
+                <Form.Group id="form-section" hidden={auditorium.length === 0}>
                     <Form.Label>
                         <h3>Screening Times:</h3>
                     </Form.Label>
@@ -205,9 +199,7 @@ export function BookMovie() {
                 </Form.Group>
 
                 <Form.Group
-                    style={{
-                        marginTop: "2rem",
-                    }}
+                    id="form-section"
                     hidden={screeningTime.length === 0}
                 >
                     <Form.Label>
@@ -252,7 +244,7 @@ export function BookMovie() {
                         <Button
                             variant="outline-light"
                             onClick={() => window.location.reload(-1)}
-                            style={{ marginRight: "1em" }}
+                            id="form-button"
                         >
                             <FontAwesomeIcon icon={faTrash} />
                         </Button>
@@ -280,9 +272,7 @@ export function BookMovie() {
                     </ButtonGroup>
                 </Form.Group>
                 <Form.Group
-                    style={{
-                        marginTop: "2rem",
-                    }}
+                    id="form-section"
                     hidden={bookedTickets.length === 0}
                 >
                     <Button

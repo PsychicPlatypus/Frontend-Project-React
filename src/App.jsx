@@ -7,9 +7,9 @@ import { Receipt } from "./Receipt";
 
 import "./MovieCard.css";
 import "./App.css";
+import "./BookMovie.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilm } from "@fortawesome/free-solid-svg-icons";
-import DisplayChairs from "./DisplayChairs";
 
 function App() {
     return (
