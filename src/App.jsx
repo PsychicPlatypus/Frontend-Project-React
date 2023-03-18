@@ -2,12 +2,14 @@ import { Nav, Navbar } from "react-bootstrap";
 import { Route, Routes } from "react-router-dom";
 import { MoviesCategories } from "./MoviesCategories";
 import { MoviesAll } from "./MoviesAll";
+import { BookMovie } from "./BookMovie";
+import { Receipt } from "./Receipt";
 
 import "./MovieCard.css";
 import "./App.css";
-import { BookMovie } from "./BookMovie";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilm } from "@fortawesome/free-solid-svg-icons";
+import DisplayChairs from "./DisplayChairs";
 
 function App() {
     return (
@@ -40,6 +42,7 @@ function App() {
                     />
                     <Route path="/movies-all" element={<MoviesAll />} />
                     <Route path="/book-movie/:id" element={<BookMovie />} />
+                    <Route path="/receipt" element={<Receipt />} />
                 </Routes>
             </main>
         </div>

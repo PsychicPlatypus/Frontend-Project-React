@@ -10,3 +10,41 @@ body {
     color: white;
     font-family: 'Roboto', sans-serif;
 }
+
+.screening-and-seats {
+    text-align: center;
+}
+
+.seats {
+    text-align: center;
+}
+
+.seats>.row {
+    display: inline-block;
+}
+
+.seats>.row>div {
+    font-size: xx-small;
+    background-color: white;
+    color: black;
+    float: right;
+    text-align: center;
+    padding-top: 0.3em;
+    border-top-left-radius: 25%;
+    border-top-right-radius: 25%;
+    width: 1.5rem;
+    height: 2rem;
+    margin: 3px 1px;
+    cursor: pointer;
+}
+
+.seats>.row>.selected {
+    background-color: #72b457;
+    color: white;
+}
+
+.seats>.row>.occupied {
+    background-color: rgb(152, 28, 28);
+    color: white;
+    cursor: not-allowed;
+}

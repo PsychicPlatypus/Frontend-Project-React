@@ -1,11 +1,6 @@
-// **Feature Flicks** would like to have a booking system where you can see a graphic view of the auditorium and its seats. You should be able to book a number of adjacent seats during a specific screening of a film.
-// While booking, you should be able to choose the number of visitors and see the total price. When you complete a booking, you should receive a unique booking number, as well as be able to see which row(s) and seats you have booked.
-// Note! Seniors (above the age of 65) and children (under the of 12) should have a lower ticket price. The normal ticket price is SEK 110, seniors SEK 85, children SEK 75.
-// So far, you don’t need to be able to pay online - you pay when you arrive at the cinema and tell the staff your booking number.
-// The seats are numbered from right to left, front to back. (The chair at the front right has the number 1. If the salon has 100 chairs, the one at the furthest back and to the left has the number 100.)
-//
-
-import { useState, useEffect } from "react";
+import { faX, faCheck, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useState, useEffect, useReducer } from "react";
 import {
     Container,
     Form,
@@ -13,9 +8,12 @@ import {
     ToggleButton,
     Button,
     ButtonGroup,
+    Card,
 } from "react-bootstrap";
 import { getMovieById, getOccupiedSeats } from "../data";
+import DisplayChairs from "./DisplayChairs";
 import { MovieCard } from "./MovieCard";
+let OCCUPIEDSEATS;
 
 const AUDITORIUMS = [
     {
@@ -47,11 +45,21 @@ const TICKETTYPES = [
 ];
 
 export function BookMovie() {
+    // Bad practice, but it works
+    const [, forceUpdate] = useReducer((x) => x + 1, 0);
+
+    const [chairPicked, setChairPicked] = useState(true);
+    const [occupyChair, setOccupyChair] = useState(0);
+    const [auditorium, setAuditorium] = useState("");
+    const [screeningTime, setScreeningTime] = useState("");
     const [movie, setMovie] = useState([]);
     const [occupiedSeats, setOccupiedSeats] = useState([]);
-    const [auditorium, setAuditorium] = useState("");
-    const [movieBooking, setMovieBooking] = useState({
-        screeningTime: "",
+    const [bookedTickets, setBookedTickets] = useState([]);
+    const [selectedScreening, setSelectedScreening] = useState({});
+    const [addedTicket, setAddedTicket] = useState({
+        index: 0,
+        name: "default",
+        price: 0,
     });
 
     useEffect(() => {
@@ -59,18 +67,69 @@ export function BookMovie() {
             setMovie([movie_]);
             getOccupiedSeats(movie_.title).then((data) => {
                 setOccupiedSeats(data);
+                OCCUPIEDSEATS = data;
             });
         });
     }, []);
 
     useEffect(() => {
-        getOccupiedSeats(movie.title).then((data) => {
-            data.filter((seat) => seat.auditorium === auditorium);
-            setOccupiedSeats(data);
-        });
+        if (auditorium.length === 0) return;
+        const filteredSeats = OCCUPIEDSEATS;
+        setOccupiedSeats(
+            filteredSeats.filter((seat) => seat.auditorium === auditorium)
+        );
+        resetTickets();
+        setScreeningTime("");
     }, [auditorium]);
 
-    console.log(occupiedSeats);
+    useEffect(() => {
+        if (screeningTime.length === 0) return;
+        const filteredSeats = OCCUPIEDSEATS;
+
+        setSelectedScreening(
+            filteredSeats.filter(
+                (seat) =>
+                    seat.auditorium === auditorium &&
+                    seat.screeningTime === screeningTime
+            )[0]
+        );
+        resetTickets();
+    }, [screeningTime]);
+
+    useEffect(() => {
+        if (addedTicket.name !== "default") {
+            selectedScreening.occupied++;
+            addedTicket.id = bookedTickets.length + 1;
+            bookedTickets.push(addedTicket);
+            setBookedTickets(bookedTickets);
+            setAddedTicket({
+                index: 0,
+                name: "default",
+                price: 0,
+            });
+            setChairPicked(false);
+        }
+    }, [addedTicket]);
+
+    useEffect(() => {
+        if (occupyChair !== 0) {
+            const newOccupiedSeats =
+                selectedScreening.occupiedSeats + ", " + occupyChair;
+
+            selectedScreening.occupiedSeats = newOccupiedSeats;
+            setOccupyChair(0);
+            setChairPicked(true);
+        }
+    }, [occupyChair]);
+
+    const resetTickets = () => {
+        setBookedTickets([]);
+        setAddedTicket({
+            index: 0,
+            name: "default",
+            price: 0,
+        });
+    };
 
     return (
         <Container>
@@ -95,7 +154,7 @@ export function BookMovie() {
                     <ButtonGroup>
                         {AUDITORIUMS.map((auditorium_) => (
                             <ToggleButton
-                                key={auditorium_.id}
+                                key={auditorium_.name}
                                 type="radio"
                                 variant="outline-light"
                                 name="auditorium"
@@ -110,35 +169,143 @@ export function BookMovie() {
                         ))}
                     </ButtonGroup>
                 </Form.Group>
-                {auditorium && (
-                    <Form.Group controlId="formScreeningDate">
-                        <Form.Group>
-                            <ButtonGroup>
-                                {occupiedSeats.map((seat) => {
-                                    <ToggleButton
-                                        key={seat.screeningId}
-                                        type="radio"
-                                        variant="outline-light"
-                                        name="screeningDate"
-                                        value={seat.screeningTime}
-                                        checked={
-                                            movieBooking.screeningTime ===
-                                            seat.screeningTime
-                                        }
-                                        onClick={() => {
-                                            setMovieBooking({
-                                                screeningTime:
-                                                    seat.screeningTime,
-                                            });
-                                        }}
-                                    >
-                                        {seat.screeningTime}
-                                    </ToggleButton>;
-                                })}
-                            </ButtonGroup>
-                        </Form.Group>
-                    </Form.Group>
-                )}
+
+                <Form.Group
+                    style={{
+                        marginTop: "2rem",
+                    }}
+                    hidden={auditorium.length === 0}
+                >
+                    <Form.Label>
+                        <h3>Screening Times:</h3>
+                    </Form.Label>
+                    <br />
+                    <ButtonGroup>
+                        {auditorium.length > 0 &&
+                            occupiedSeats.map((seat) => (
+                                <ToggleButton
+                                    key={seat.screeningTime}
+                                    type="radio"
+                                    variant="outline-light"
+                                    name="screeningTime"
+                                    value={seat.screeningTime}
+                                    checked={
+                                        screeningTime === seat.screeningTime
+                                    }
+                                    onClick={() => {
+                                        setScreeningTime(seat.screeningTime);
+                                    }}
+                                >
+                                    {seat.screeningTime
+                                        .replace(/T/, " ")
+                                        .replace(/\..+/, "")}
+                                </ToggleButton>
+                            ))}
+                    </ButtonGroup>
+                </Form.Group>
+
+                <Form.Group
+                    style={{
+                        marginTop: "2rem",
+                    }}
+                    hidden={screeningTime.length === 0}
+                >
+                    <Form.Label>
+                        <h3>
+                            Add Tickets, Available Amount:{" "}
+                            {selectedScreening.total -
+                                selectedScreening.occupied}
+                        </h3>
+                    </Form.Label>
+                    <Row>
+                        {bookedTickets.map((ticket, index) => (
+                            <Card key={index} bg="dark" text="white">
+                                <Card.Body>
+                                    <Card.Header>
+                                        {ticket.name +
+                                            " | " +
+                                            ticket.price +
+                                            "kr"}
+                                    </Card.Header>
+                                    <Card.Footer>
+                                        <Card.Text> Select Seat: </Card.Text>
+                                        <DisplayChairs
+                                            auditoriumId={
+                                                AUDITORIUMS.find(
+                                                    (auditorium_) =>
+                                                        auditorium_.name ===
+                                                        auditorium
+                                                ).id
+                                            }
+                                            selectedScreening={
+                                                selectedScreening
+                                            }
+                                            func={setOccupyChair}
+                                        />
+                                    </Card.Footer>
+                                </Card.Body>
+                            </Card>
+                        ))}
+                    </Row>
+
+                    {bookedTickets.length !== 0 && (
+                        <Button
+                            variant="outline-light"
+                            onClick={() => window.location.reload(-1)}
+                            style={{ marginRight: "1em" }}
+                        >
+                            <FontAwesomeIcon icon={faTrash} />
+                        </Button>
+                    )}
+                    <ButtonGroup>
+                        {TICKETTYPES.map((ticketType) => (
+                            <Button
+                                key={ticketType.price}
+                                variant="outline-light"
+                                onClick={() => setAddedTicket(ticketType)}
+                                disabled={
+                                    (selectedScreening.total -
+                                        selectedScreening.occupied ===
+                                        0) |
+                                    (chairPicked === false)
+                                }
+                            >
+                                {ticketType.name +
+                                    " | " +
+                                    ticketType.price +
+                                    "kr"}
+                            </Button>
+                        ))}
+                        <br />
+                    </ButtonGroup>
+                </Form.Group>
+                <Form.Group
+                    style={{
+                        marginTop: "2rem",
+                    }}
+                    hidden={bookedTickets.length === 0}
+                >
+                    <Button
+                        variant="outline-success"
+                        // onClick add to localstorage
+                        onClick={() => {
+                            localStorage.setItem(
+                                "booking",
+                                JSON.stringify({
+                                    movie: movie[0],
+                                    auditorium: auditorium,
+                                    screeningTime: screeningTime,
+                                    tickets: bookedTickets,
+                                    selectedScreening: selectedScreening,
+                                })
+                            );
+                        }}
+                        href="/receipt"
+                        disabled={chairPicked === false}
+                    >
+                        <FontAwesomeIcon icon={faCheck} />
+                    </Button>
+                </Form.Group>
             </Form>
         </Container>
     );

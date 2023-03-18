@@ -1,3 +1,10 @@
+export async function getSeatByAuditoriumId(auditoriumId) {
+    const res = await fetch(
+        `/api/seats/?auditoriumId=${auditoriumId}&sort=seatNumber`
+    );
+    return await res.json();
+}
+
 export async function getAllMovies() {
     /**
      * @type {Movie[]}
