@@ -1,13 +1,13 @@
 import { Nav, Navbar } from "react-bootstrap";
 import { Route, Routes } from "react-router-dom";
-import { MoviesCategories } from "./MoviesCategories";
-import { MoviesAll } from "./MoviesAll";
-import { BookMovie } from "./BookMovie";
-import { Receipt } from "./Receipt";
+import { MoviesCategories } from "./components/MoviesCategories";
+import { MoviesAll } from "./components/MoviesAll";
+import { BookMovie } from "./components/BookMovie";
+import { Receipt } from "./components/Receipt";
 
-import "./MovieCard.css";
-import "./App.css";
-import "./BookMovie.css";
+import "./css/MovieCard.css";
+import "./css/App.css";
+import "./css/BookMovie.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilm } from "@fortawesome/free-solid-svg-icons";
 

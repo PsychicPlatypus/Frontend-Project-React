@@ -1,5 +1,5 @@
 import { MovieCard } from "./MovieCard";
-import { getAllMovies, getMoviesWithSort } from "../data";
+import { getAllMovies, getMoviesWithSort } from "../../data";
 import { Container, Row } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { SortingWidget } from "./SortingWidget";

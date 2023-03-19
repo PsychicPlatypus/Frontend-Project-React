@@ -1,6 +1,6 @@
 import { Carousel, Container, Row } from "react-bootstrap";
 import { useState, useEffect } from "react";
-import { getAllCategories, getMoviesWithSort } from "../data";
+import { getAllCategories, getMoviesWithSort } from "../../data";
 import { MovieCard } from "./MovieCard";
 
 export function MoviesCategories() {

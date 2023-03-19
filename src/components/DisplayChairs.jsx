@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { getSeatByAuditoriumId } from "../data";
-import { useStates } from "./utils/states";
+import { getSeatByAuditoriumId } from "../../data";
+import { useStates } from "../utils/states";
 
 export default function DisplayChairs({
     selectedScreening,

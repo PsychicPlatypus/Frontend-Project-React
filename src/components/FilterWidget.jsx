@@ -2,7 +2,7 @@ import { DropdownButton, Nav, Dropdown } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
-import { getAllCategories } from "../data";
+import { getAllCategories } from "../../data";
 
 export function FilterWidget({ func }) {
     const [categories, setCategories] = useState([]);

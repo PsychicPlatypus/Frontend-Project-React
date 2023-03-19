@@ -10,7 +10,7 @@ import {
     ButtonGroup,
     Card,
 } from "react-bootstrap";
-import { getMovieById, getOccupiedSeats } from "../data";
+import { getMovieById, getOccupiedSeats } from "../../data";
 import DisplayChairs from "./DisplayChairs";
 import { MovieCard } from "./MovieCard";
 let OCCUPIEDSEATS;
