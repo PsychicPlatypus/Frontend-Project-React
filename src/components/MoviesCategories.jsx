@@ -4,6 +4,8 @@ import { getAllCategories, getMoviesWithSort } from "../../data";
 import { MovieCard } from "./MovieCard";
 
 export function MoviesCategories() {
+    const screenWidth =
+        window.screen.width > 1200 ? 3 : window.screen.width > 768 ? 2 : 1;
     const [movies, setMovies] = useState([]);
     const [categories, setCategories] = useState([]);
 
@@ -40,7 +42,7 @@ export function MoviesCategories() {
                                         )
                                     )
                                     .reduce((acc, movie, index) => {
-                                        if (index % 3 === 0) {
+                                        if (index % screenWidth === 0) {
                                             acc.push([]);
                                         }
                                         acc[acc.length - 1].push(movie);

@@ -113,16 +113,13 @@ export function BookMovie() {
         }
     }, [addedTicket]);
 
-    function seatSelectedHandler(seat) {
-        setOccupyChair(seat);
-        // Set the last tickets seatNumber to seat
-        const lastTicket = bookedTickets[bookedTickets.length - 1];
-        lastTicket.seatNumber = seat;
-        setBookedTickets(bookedTickets);
-    }
-
     useEffect(() => {
         if (occupyChair !== 0) {
+            console.log("Seat selected: " + occupyChair);
+            // Set the last tickets seatNumber to seat
+            const lastTicket = bookedTickets[bookedTickets.length - 1];
+            lastTicket.seatNumber = occupyChair;
+            setBookedTickets(bookedTickets);
             const newOccupiedSeats =
                 selectedScreening.occupiedSeats + ", " + occupyChair;
 
@@ -242,7 +239,7 @@ export function BookMovie() {
                                             selectedScreening={
                                                 selectedScreening
                                             }
-                                            func={seatSelectedHandler}
+                                            func={setOccupyChair}
                                         />
                                     </Card.Footer>
                                 </Card.Body>

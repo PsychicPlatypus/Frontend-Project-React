@@ -20,5 +20,3 @@ function makeId(length) {
     }
     return result;
 }
-
-console.log(generate());
