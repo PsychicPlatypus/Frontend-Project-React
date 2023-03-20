@@ -42,7 +42,7 @@ function App() {
                     />
                     <Route path="/movies-all" element={<MoviesAll />} />
                     <Route path="/book-movie/:id" element={<BookMovie />} />
-                    <Route path="/receipt" element={<Receipt />} />
+                    <Route path="/receipt/:id" element={<Receipt />} />
                 </Routes>
             </main>
         </div>

@@ -17,7 +17,6 @@ export default function DisplayChairs({
     useEffect(() => {
         (async () => {
             let screening = selectedScreening;
-            console.log("selectedScreening", selectedScreening);
 
             // Convert the string of occupied seats into an array of numbers
             screening.occupiedSeats = Array.isArray(

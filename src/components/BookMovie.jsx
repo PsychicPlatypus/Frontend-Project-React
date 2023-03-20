@@ -1,4 +1,4 @@
-import { faX, faCheck, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useEffect, useReducer } from "react";
 import {
@@ -11,8 +11,10 @@ import {
     Card,
 } from "react-bootstrap";
 import { getMovieById, getOccupiedSeats } from "../../data";
+import { generate } from "../utils/uid";
 import DisplayChairs from "./DisplayChairs";
 import { MovieCard } from "./MovieCard";
+
 let OCCUPIEDSEATS;
 
 const AUDITORIUMS = [
@@ -110,6 +112,14 @@ export function BookMovie() {
             setChairPicked(false);
         }
     }, [addedTicket]);
+
+    function seatSelectedHandler(seat) {
+        setOccupyChair(seat);
+        // Set the last tickets seatNumber to seat
+        const lastTicket = bookedTickets[bookedTickets.length - 1];
+        lastTicket.seatNumber = seat;
+        setBookedTickets(bookedTickets);
+    }
 
     useEffect(() => {
         if (occupyChair !== 0) {
@@ -232,7 +242,7 @@ export function BookMovie() {
                                             selectedScreening={
                                                 selectedScreening
                                             }
-                                            func={setOccupyChair}
+                                            func={seatSelectedHandler}
                                         />
                                     </Card.Footer>
                                 </Card.Body>
@@ -290,7 +300,7 @@ export function BookMovie() {
                                 })
                             );
                         }}
-                        href="/receipt"
+                        href={`/receipt/${generate()}`}
                         disabled={chairPicked === false}
                     >
                         <FontAwesomeIcon icon={faCheck} />
