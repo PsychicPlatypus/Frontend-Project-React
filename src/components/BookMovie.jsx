@@ -139,7 +139,7 @@ export function BookMovie() {
     };
 
     return (
-        <Container>
+        <Container className="mb-5">
             <Row className="justify-content-center mb-5">
                 {movie.length > 0 ? (
                     movie.map((movie) => (
@@ -268,6 +268,7 @@ export function BookMovie() {
                                         0) |
                                     (chairPicked === false)
                                 }
+                                href="#success"
                             >
                                 {ticketType.name +
                                     " | " +
@@ -283,6 +284,7 @@ export function BookMovie() {
                     hidden={bookedTickets.length === 0}
                 >
                     <Button
+                        id="success"
                         variant="outline-success"
                         // onClick add to localstorage
                         onClick={() => {
