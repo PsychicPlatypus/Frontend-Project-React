@@ -172,3 +172,13 @@ export async function getOccupiedSeats(movieName) {
     const res = await fetch(`/api/occupied_seats?movie=${movieName}`);
     return await res.json();
 }
+
+export async function getAllAuditoriums() {
+    const res = await fetch("/api/auditoriums");
+    return await res.json();
+}
+
+export async function getAllTicketTypes() {
+    const res = await fetch("/api/ticketTypes");
+    return await res.json();
+}

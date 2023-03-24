@@ -1,6 +1,6 @@
 import { faCheck, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState, useEffect, useReducer } from "react";
+import { useState, useEffect } from "react";
 import {
     Container,
     Form,
@@ -10,46 +10,23 @@ import {
     ButtonGroup,
     Card,
 } from "react-bootstrap";
-import { getMovieById, getOccupiedSeats } from "../../data";
+import {
+    getMovieById,
+    getOccupiedSeats,
+    getAllAuditoriums,
+    getAllTicketTypes,
+} from "../../data";
 import { generate } from "../utils/uid";
 import DisplayChairs from "./DisplayChairs";
 import { MovieCard } from "./MovieCard";
 
 let OCCUPIEDSEATS;
 
-const AUDITORIUMS = [
-    {
-        id: 2,
-        name: "Lilla Salongen",
-    },
-    {
-        id: 1,
-        name: "Stora Salongen",
-    },
-];
-
-const TICKETTYPES = [
-    {
-        id: 1,
-        name: "Child",
-        price: 65,
-    },
-    {
-        id: 2,
-        name: "Senior",
-        price: 75,
-    },
-    {
-        id: 3,
-        name: "Adult",
-        price: 85,
-    },
-];
-
 export function BookMovie() {
-    // Bad practice, but it works
-    const [, forceUpdate] = useReducer((x) => x + 1, 0);
-
+    const [ticketTypes, setTicketTypes] = useState([
+        { id: 0, name: "", price: 0 },
+    ]);
+    const [auditoriums, setAuditoriums] = useState([{ id: 0, name: "" }]);
     const [chairPicked, setChairPicked] = useState(true);
     const [occupyChair, setOccupyChair] = useState(0);
     const [auditorium, setAuditorium] = useState("");
@@ -63,6 +40,14 @@ export function BookMovie() {
         name: "default",
         price: 0,
     });
+
+    useEffect(() => {
+        getAllAuditoriums().then((data) => setAuditoriums(data));
+    }, []);
+
+    useEffect(() => {
+        getAllTicketTypes().then((data) => setTicketTypes(data));
+    }, []);
 
     useEffect(() => {
         getMovieById(window.location.href.split("/").pop()).then((movie_) => {
@@ -157,7 +142,7 @@ export function BookMovie() {
                 </Form.Group>
                 <Form.Group>
                     <ButtonGroup>
-                        {AUDITORIUMS.map((auditorium_) => (
+                        {auditoriums.map((auditorium_) => (
                             <ToggleButton
                                 key={auditorium_.name}
                                 type="radio"
@@ -230,7 +215,7 @@ export function BookMovie() {
                                         <Card.Text> Select Seat: </Card.Text>
                                         <DisplayChairs
                                             auditoriumId={
-                                                AUDITORIUMS.find(
+                                                auditoriums.find(
                                                     (auditorium_) =>
                                                         auditorium_.name ===
                                                         auditorium
@@ -257,7 +242,7 @@ export function BookMovie() {
                         </Button>
                     )}
                     <ButtonGroup>
-                        {TICKETTYPES.map((ticketType) => (
+                        {ticketTypes.map((ticketType) => (
                             <Button
                                 key={ticketType.price}
                                 variant="outline-light"
