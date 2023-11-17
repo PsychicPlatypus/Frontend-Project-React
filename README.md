@@ -38,17 +38,23 @@ This is the first component the user will see when they open the website.
 It contains all the movies grouped by their category.
 Every category is displayed within a carousel, which can be scrolled through by clicking on the arrows at the sides of the screen.
 
+<img width="800" alt="image" src="https://github.com/PsychicPlatypus/Frontend-Project-React/assets/89925489/d6d63671-4d75-474e-a44e-786c18d1956d">
+
 #### Sorting & Filtering Widgets
 
 The sorting and filtering widgets are located at the bottom of the screen, and are used to sort and filter the movies displayed on the screen.
 The sorting widgets are used to sort the movies by their title, screening date, or category.
 The filtering widgets are used to filter the movies by their genre/category.
 
+<img width="400" alt="image" src="https://github.com/PsychicPlatypus/Frontend-Project-React/assets/89925489/f068ae87-89d9-432e-bf80-1d11255e26b2">
+
 ### Movie Booking Components
 
 The movie booking components are used to book a movie for a specific screening time.
 The user can select the number of tickets they want to book, and the seats they want to book.
 The user can also select the type of ticket they want to book, and the type of payment they want to use.
+
+<img width="400" alt="image" src="https://github.com/PsychicPlatypus/Frontend-Project-React/assets/89925489/af4308a1-e1bd-41c4-9565-7bc2e324ed2c">
 
 #### BookMovie Component
 
@@ -60,8 +66,15 @@ If the user makes a mistake, they can click on the `Trash` button to reset the b
 #### DisplayChairs Component
 
 This component is used to display the seats available for a specific screening time.
+<div>
+<img width="400" alt="image" src="https://github.com/PsychicPlatypus/Frontend-Project-React/assets/89925489/18cf1288-31f9-410e-aebd-cec9742b8331">
+<img width="400" alt="image" src="https://github.com/PsychicPlatypus/Frontend-Project-React/assets/89925489/6f8f58b7-7ce5-41c5-ae68-2ace859c29a7">
+</div>
 
 #### Receipt Component
 
 Once the user has booked their tickets, they will be redirected to the receipt page.
 This page will display the details of the booking, and the user can click on the `Continue` button to go back to the main page.
+
+<img width="400" alt="image" src="https://github.com/PsychicPlatypus/Frontend-Project-React/assets/89925489/e21ffe9a-9132-4274-b3f6-061014494ddc">
+
